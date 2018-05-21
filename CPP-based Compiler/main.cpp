@@ -7,9 +7,38 @@
 //
 
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include "FileHandler.hpp"
+#include "Scanner.hpp"
+#include "Parser.hpp"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    
+    using namespace std;
+    
+    ifstream inp;
+    ofstream outp;
+    ofstream listp;
+    bool eofReached = false;
+    string token = "";
+    FileHandler fh;
+    Scanner sc;
+    Parser ps;
+    
+    cout << "CPP-based Compiler\n";
+    cout << "\tPreparing to open the file handler...\n\n" << endl;
+    
+    fh.OpenFiles(inp, outp, listp);
+    
+    
+    while(!eofReached) {
+        token = sc.GetToken(inp, outp, listp);
+        cout << "Found token:\t" << token << endl;
+        if (token == "") {
+            eofReached = true;
+        }
+    }
+    
     return 0;
 }
