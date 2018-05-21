@@ -21,8 +21,10 @@ private:
     string token; // used to keep track of read char from file
     string listbuffer; // used to keep track of all input from file
     int linenumber;
-    string* lexErrorArr;
+    char* lexErrorArr;
     string* syntaxErrorArr;
+    int lexArrIndex;
+    int lexArrSize;
 public:
     Scanner();
     string GetToken(ifstream& inp, ofstream& listp);
@@ -30,7 +32,11 @@ public:
     bool CheckCharForAlpha(const char c);
     bool CheckCharForDigit(const char c);
     bool CheckCharForWhitespace(const char c);
-    string* getLexErrors(void) const;
+    void AddToLexArr(const char);
+    void ResizeLexArray(void);
+    char* getLexErrors(void) const;
+    string* getSyntaxErrors(void) const;
+    
 };
 
 

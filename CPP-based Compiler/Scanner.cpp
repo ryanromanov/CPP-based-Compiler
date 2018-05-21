@@ -20,8 +20,10 @@ Scanner::Scanner() {
     token = ""; // prep buffer to null
     listbuffer = "";
     linenumber = 0;
+    lexArrSize = 10;
+    lexArrIndex = 0;
     syntaxErrorArr = new string[10];
-    lexErrorArr = new string [10];
+    lexErrorArr = new char [lexArrSize];
 }
 /************************************************************
  
@@ -143,7 +145,7 @@ string Scanner::GetToken(ifstream &inp, ofstream &listp) {
                 listbuffer += c;
                 // add to listing error buffer
                 // but continue reading for next token
-                
+                AddToLexArr(c);
             }
             else {
                 // we already have something in the token buffer
@@ -216,15 +218,44 @@ bool Scanner::CheckCharForWhitespace(const char c) {
     else {
         iswhitespace = false;
     }
-    
     return iswhitespace;
 }
+/************************************************************
+ This function adds a found character to the lex array
+ - first it checks to see if we have reached the max_size of the lexArray
+    - if so, it calls ResizeLexArray, which will does exactly that
+ - then it adds the read character into the lexErrorArray
+ - finally it increments the lex array index
+************************************************************/
+void Scanner::AddToLexArr(const char c) {
+    if (lexArrIndex >= lexArrSize) {
+        ResizeLexArray();
+    }
+    lexErrorArr[lexArrIndex] = c;
+    lexArrIndex++;
+}
+/************************************************************
+ This function resizes the lexErrorArray (used to hold lexical errors)
+ - it copies over the values to a new string* array that holds 5 more elements
+ - then it increases the lexArrSize by 5
+ - finally it sets the lexErrorArr to the resized array and deletes the resized array
+************************************************************/
+void Scanner::ResizeLexArray(void) {
+    char* resizedArray = new char[lexArrSize + 5];
+    int i;
+    for (i = 0; i < lexArrSize; i++) {
+        resizedArray[i] = lexErrorArr[i];
+    }
+    lexArrSize+= 5;
+    lexErrorArr = resizedArray;
+    delete[] resizedArray;
+}
+
 // Returns lexical error array pointer
-string* Scanner::getLexErrors(void) const {
+char* Scanner::getLexErrors(void) const {
     return lexErrorArr;
 }
 // returns syntax error array pointer
-
 string* Scanner::getSyntaxErrors(void) const {
     return syntaxErrorArr;
 }
