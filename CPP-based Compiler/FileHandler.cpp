@@ -298,3 +298,12 @@ bool FileHandler::BackupOutputFile(ofstream& outp, const string outputFileName) 
     return backupSucceeded;
 }
 
+/************************************************************
+ CLOSE FILES FUNCTION
+ - this function will close all opened files
+************************************************************/
+void FileHandler::CloseFiles(ifstream& in, ofstream& out, ofstream& list) {
+    in.close();
+    out.close();
+    list.close();
+}

@@ -9,6 +9,7 @@
 #ifndef Parser_hpp
 #define Parser_hpp
 
+#include "Scanner.hpp"
 #include <stdio.h>
 #include <string>
 #include <iostream>
@@ -21,6 +22,7 @@ using namespace std;
 
 class Parser {
 private:
+    Scanner sc;
     string currToken;
     string nextToken;
     string validKeywords[35]; // arrat used to keep track of known keywords (reserved words?) such as ")" and "BEGIN"
@@ -64,9 +66,12 @@ private:
 public:
     Parser();
     int StartParser(ifstream &inp, ofstream &outp, ofstream &listp);
+    bool AdvanceToken();
     int GetTokenType(const string); // main token check, calls three function below
     int CheckForKeyword(const string); // checks passed token for keyword
     int CheckForVarOrDigit(const string);
+    
+    
     
 };
 

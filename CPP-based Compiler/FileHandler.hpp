@@ -45,6 +45,7 @@ public:
     bool CheckExtension(const string, const int);
     void ExtensionAdder(string&, const int);
     int OpenFiles(ifstream&, ofstream&, ofstream&);
+    void CloseFiles(ifstream&, ofstream&, ofstream&);
 };
 
 #endif /* FileHandler_hpp */

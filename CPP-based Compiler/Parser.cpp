@@ -20,6 +20,7 @@ using namespace std;
 Parser::Parser() {
     currToken = "";
     nextToken = "";
+    sc;
     validKeywords[0] = "BEGIN";
     validKeywords[1] = "END";
     validKeywords[2] = "READ";
@@ -59,12 +60,22 @@ Parser::Parser() {
 
 
 int Parser::StartParser(ifstream &inp, ofstream &outp, ofstream &listp) {
-    
-    
-    
+    bool eofReached = false;
+    while (!eofReached) {
+        currToken = sc.GetToken(inp, listp);
+        nextToken = sc.GetToken(inp, listp);
+        cout << "Found token:\t" << currToken << endl;
+        if (currToken == "" || nextToken == "") {
+            eofReached = true;
+        }
+    }
     
     return 0;
 }
+
+
+
+
 /************************************************************
  This function is the tokentype superfunction that calls two other functions
  - first it calls CheckForKeyword

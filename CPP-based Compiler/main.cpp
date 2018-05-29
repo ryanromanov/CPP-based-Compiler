@@ -10,7 +10,6 @@
 #include <iomanip>
 #include <fstream>
 #include "FileHandler.hpp"
-#include "Scanner.hpp"
 #include "Parser.hpp"
 
 int main(int argc, const char * argv[]) {
@@ -33,12 +32,15 @@ int main(int argc, const char * argv[]) {
     
     
     while(!eofReached) {
-        token = sc.GetToken(inp, outp, listp);
+        ps.StartParser(inp, outp, listp);
+        //token = sc.GetToken(inp, outp, listp);
         cout << "Found token:\t" << token << endl;
         if (token == "") {
             eofReached = true;
         }
     }
+    
+    fh.CloseFiles(inp, outp, listp);
     
     return 0;
 }
