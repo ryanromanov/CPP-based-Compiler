@@ -65,6 +65,7 @@ int Parser::StartParser(ifstream &inp, ofstream &outp, ofstream &listp) {
         currToken = sc.GetToken(inp, listp);
         nextToken = sc.GetToken(inp, listp);
         cout << "Found token:\t" << currToken << endl;
+        cout << "Found token:\t" << nextToken << endl;
         if (currToken == "" || nextToken == "") {
             eofReached = true;
         }
@@ -85,9 +86,15 @@ int Parser::StartParser(ifstream &inp, ofstream &outp, ofstream &listp) {
  ************************************************************/
 int Parser::GetTokenType(const string token) {
     int tokentype = -1;
+    
     tokentype = CheckForKeyword(token);
     if (tokentype == -1) {
         tokentype = CheckForVarOrDigit(token);
+        if (tokentype == -1) {
+            if (sc.GetEOFReached()) {
+                tokentype = SCANEOF;
+            }
+        }
     }
     cout << "Token type found as \"" << validKeywords[tokentype] << "\"\n";
     return tokentype;
