@@ -19,7 +19,6 @@ int main(int argc, const char * argv[]) {
     ifstream inp;
     ofstream outp;
     ofstream listp;
-    bool eofReached = false;
     string token = "";
     FileHandler fh;
     Scanner sc;
@@ -30,15 +29,8 @@ int main(int argc, const char * argv[]) {
     
     fh.OpenFiles(inp, outp, listp);
     
-    
-    while(!eofReached) {
-        ps.StartParser(inp, outp, listp);
-        //token = sc.GetToken(inp, outp, listp);
-        cout << "Found token:\t" << token << endl;
-        if (token == "") {
-            eofReached = true;
-        }
-    }
+    ps.StartParser(inp, outp, listp);
+
     
     fh.CloseFiles(inp, outp, listp);
     
