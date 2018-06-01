@@ -24,6 +24,7 @@ Scanner::Scanner() {
     lexArrIndex = 0;
     syntaxErrorArr = new string[10];
     lexErrorArr = new char [lexArrSize];
+    eofReached = false;
 }
 /************************************************************
  
@@ -43,6 +44,8 @@ string Scanner::GetToken(ifstream &inp, ofstream &listp) {
         // Note however that the read char c will still be processed
         if (inp.eof()) {
             keepReading = false;
+            // if token is empty, then, the token should set to EOF
+            
         }
         else if (CheckForReservedChar(c)) {
             // we need to check to see if it's the only char that has been read
@@ -259,4 +262,10 @@ char* Scanner::getLexErrors(void) const {
 string* Scanner::getSyntaxErrors(void) const {
     return syntaxErrorArr;
 }
-
+/************************************************************
+ RETURN TRUE IF EOF REACHED
+ - nuff said
+************************************************************/
+bool Scanner::GetEOFReached(void) const {
+    return eofReached;
+}

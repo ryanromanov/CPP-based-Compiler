@@ -25,6 +25,7 @@ private:
     string* syntaxErrorArr;
     int lexArrIndex;
     int lexArrSize;
+    bool eofReached;
 public:
     Scanner();
     string GetToken(ifstream& inp, ofstream& listp);
@@ -36,6 +37,7 @@ public:
     void ResizeLexArray(void);
     char* getLexErrors(void) const;
     string* getSyntaxErrors(void) const;
+    bool GetEOFReached(void) const;
     
 };
 
