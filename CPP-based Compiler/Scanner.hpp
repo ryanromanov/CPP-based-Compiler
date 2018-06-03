@@ -33,11 +33,15 @@ public:
     bool CheckCharForAlpha(const char c);
     bool CheckCharForDigit(const char c);
     bool CheckCharForWhitespace(const char c);
+    bool AddCommentToListBuff(ifstream&, ofstream&, streampos&);
     void AddToLexArr(const char);
     void ResizeLexArray(void);
     char* getLexErrors(void) const;
     string* getSyntaxErrors(void) const;
     bool GetEOFReached(void) const;
+    
+    // Printing functions
+    void PrintToListingFile(ofstream&);
     
 };
 

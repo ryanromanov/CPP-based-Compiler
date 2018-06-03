@@ -44,7 +44,8 @@ string Scanner::GetToken(ifstream &inp, ofstream &listp) {
         // Note however that the read char c will still be processed
         if (inp.eof()) {
             keepReading = false;
-            // if token is empty, then, the token should set to EOF
+            // if token is empty, EOF reached should be set to true
+            eofReached = true;
             
         }
         else if (CheckForReservedChar(c)) {
@@ -100,6 +101,16 @@ string Scanner::GetToken(ifstream &inp, ofstream &listp) {
                         inp.seekg(spos);
                     }
                 }
+                else if (c == '-') {
+                    spos = inp.tellg();
+                    inp.get(c);
+                    if (c == '-') {
+                        token = "";
+                        listbuffer += c;
+                        AddCommentToListBuff(inp, listp, spos);
+                    }
+                    inp.seekg(spos);
+                }
                 else {
                     keepReading = false;
                 }
@@ -121,6 +132,8 @@ string Scanner::GetToken(ifstream &inp, ofstream &listp) {
                 while (CheckCharForWhitespace(c)) {
                     if (c == '\n') {
                         // print listing buffer
+                        PrintToListingFile(listp);
+                        
                     }
                     else {
                         // add it to the listing buffer
@@ -223,6 +236,19 @@ bool Scanner::CheckCharForWhitespace(const char c) {
     }
     return iswhitespace;
 }
+bool Scanner::AddCommentToListBuff(ifstream& in, ofstream& list, streampos& pos) {
+    bool commentFound = false;
+    char c = '\0';
+    pos = in.tellg();
+    in.get(c);
+    while (c != '\n' && !in.eof()) {
+        listbuffer += c;
+        commentFound = true;
+        pos = in.tellg();
+        in.get(c);
+    }
+    return commentFound;
+}
 /************************************************************
  This function adds a found character to the lex array
  - first it checks to see if we have reached the max_size of the lexArray
@@ -268,4 +294,32 @@ string* Scanner::getSyntaxErrors(void) const {
 ************************************************************/
 bool Scanner::GetEOFReached(void) const {
     return eofReached;
+}
+
+/////////////////////////////////////////////////////////////
+/* PRINT FUNCTIONS */
+/////////////////////////////////////////////////////////////
+
+/************************************************************
+ PrintListingBuffer
+ - prints to listing buffer when stream pointer sees a '\n'
+ - prints the line number, the line, and below it the errors found
+************************************************************/
+void Scanner::PrintToListingFile(ofstream& list) {
+    int i = 0;
+    list << linenumber << "\t" << listbuffer << "\n";
+    while (lexErrorArr[i] != '\0') {
+        list << "\t\tLexical Error: Unrecognized character \"" << lexErrorArr[i] << "\" found on line " << linenumber << "\n";
+        lexErrorArr[i] = '\0';
+        i++;
+    }
+    i = 0;
+    while (syntaxErrorArr[i] != "") {
+        list << "\t\tSyntax Error: \"" << syntaxErrorArr[i] << "\" not expected. \n";
+        syntaxErrorArr[i] = "";
+        i++;
+    }
+    listbuffer = "";
+    linenumber++;
+    
 }
